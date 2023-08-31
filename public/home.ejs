@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    
+        .iframe-container {
+            height: calc(100% - 350px); /* Adjust the value based on your page layout */
+            position: relative;
+        }
+    
+        #loginIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Home Page</h1>
+    <p>Username: <%= username %></p>
+    <p>Email: <%= email %></p>
+    <a href="/">Logout</a>
+    <button id="fetchSalesforceData">Fetch Salesforce Data</button>
+    <div class="iframe-container">
+        <iframe id="loginIframe" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+    
+    <script>
+        document.getElementById('fetchSalesforceData').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/fetch-salesforce-data');
+                const apiResponse = await response.json();
+                const data = JSON.parse(apiResponse.data);
+
+                // Load the loginUrl in the iframe
+                const loginIframe = document.getElementById('loginIframe');
+                loginIframe.src = data.loginUrl;
+            } catch (error) {
+                console.error('Error fetching Salesforce data:', error);
+            }
+        });
+    </script>
+</body>
+</html>
